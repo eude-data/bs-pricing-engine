@@ -40,13 +40,10 @@ class Call:
         dt = self.tau / 100
         dWts = np.random.normal(0, np.sqrt(dt), (100, nb_mc))
         Wts = np.cumsum(dWts, axis=0)
-        print(Wts.shape)
         Wts = np.vstack([np.zeros(nb_mc), Wts])
         ts = np.linspace(0, self.tau, 101)
         Sts = np.hstack([self.S * np.exp((self.r - self.sigma**2/2.)*ts).reshape([101,1]) for _ in range(nb_mc)]) * np.exp(self.sigma * Wts)
-        print(Sts.shape)
         ATs = np.exp(np.mean(np.log(Sts), axis=0))
-        print(Sts.shape)
         return np.exp(-self.r * self.tau) * np.mean(np.maximum(ATs - self.K, 0.))
 
     @property
@@ -58,7 +55,3 @@ class Call:
         d1 = numerator_d1 / denominator_d1
         d2 = d1 - sigma_G * np.sqrt(self.tau)
         return self.S * np.exp((b-self.r)*self.tau) * norm.cdf(d1) - self.K * np.exp(-self.r * self.tau) * norm.cdf(d2)
-
-
-
-
